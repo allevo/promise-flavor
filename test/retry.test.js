@@ -68,7 +68,7 @@ test('retry with delay', t => {
     })
 })
 
-test('retry with invalid times', t => {
+test('retry with negative times', t => {
   return retry(() => t.fail('This function should never be called'), {times: -1})
     .then(() => {
       t.fail('This test should fails')
@@ -78,13 +78,43 @@ test('retry with invalid times', t => {
     })
 })
 
-test('retry with invalid delay', t => {
+test('retry with times = "FOO"', t => {
+  return retry(() => t.fail('This function should never be called'), {times: "FOO"})
+    .then(() => {
+      t.fail('This test should fails')
+    })
+    .catch(e => {
+      t.equal(e.message, 'Invalid options: times')
+    })
+})
+
+test('retry with negative delay', t => {
   return retry(() => t.fail('This function should never be called'), {delay: -1})
     .then(() => {
       t.fail('This test should fails')
     })
     .catch(e => {
       t.equal(e.message, 'Invalid options: delay')
+    })
+})
+
+test('retry with delay = "FOO"', t => {
+  return retry(() => t.fail('This function should never be called'), {delay: "FOO"})
+    .then(() => {
+      t.fail('This test should fails')
+    })
+    .catch(e => {
+      t.equal(e.message, 'Invalid options: delay')
+    })
+})
+
+test('retry with invalid delayType', t => {
+  return retry(() => t.fail('This function should never be called'), {delayType: 'FOO'})
+    .then(() => {
+      t.fail('This test should fails')
+    })
+    .catch(e => {
+      t.equal(e.message, 'Invalid options: delayType')
     })
 })
 

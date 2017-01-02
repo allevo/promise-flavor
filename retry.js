@@ -29,8 +29,9 @@ function retryPromise(promiseFunction, options) {
   const delay = (options || {delay: DEFAULT_DELAY}).delay || DEFAULT_DELAY
   const delayFunction = (options || {delayType: DEFAULT_DELAY_TYPE}).delayType || DEFAULT_DELAY_TYPE
 
-  if (times < 1) return Promise.reject(new Error('Invalid options: times'))
-  if (delay < 0) return Promise.reject(new Error('Invalid options: delay'))
+  if (times < 1 || !Number.isInteger(times)) return Promise.reject(new Error('Invalid options: times'))
+  if (delay < 0 || !Number.isInteger(delay)) return Promise.reject(new Error('Invalid options: delay'))
+  if (typeof delayFunction !== 'function') return Promise.reject(new Error('Invalid options: delayType'))
 
   const _options = {times: times, delay: delay, initialTimes: times, delayFunction: delayFunction}
   return _retryPromise(promiseFunction, _options)
