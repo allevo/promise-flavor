@@ -7,47 +7,65 @@ It implements the classic function needed to develop easier
 
 ## Motivation
 
-The Promise specs make the life easier but not at all. This library is thougth for you. See `API Reference` section to see all features
+The Promise specs make the life easier but not at all. This library is thougth for you. See [API Reference](#api-reference) section to see all features
 
 ## Installation
 
-```
+```bash
 npm install promise-flavor
 ```
 
+## Use
+```javascript
+const promiseFlavor = require('promise-flavor')
+```
+
 ## API Reference
+ * [parallel](#parallel)
+ * [serie](#serie)
+ * [map](#map)
+ * [filter](#filter)
+ * [waterfall](#waterfall)
+ * [retry](#retry)
+ * [auto](#auto)
+ * [parallelAnyway](#parallelanyway)
+ * [serieAnyway](#serieanyway)
+ * [mapAnyway](#mapanyway)
+ * [filterAnyway](#filteranyway)
+
+
 **NB:** All function used for the examples return an instance of Promise
 
 ### parallel
-```
-parallel([func1, func2, func3])
+```javascript
+promiseFlavor.parallel([func1, func2, func3])
     .then(r => console.log(r[0], r[1], r[2]))
     
-parallel({user: getUser, options: getOptions, credential: getCredential})
+promiseFlavor.parallel({user: getUser, options: getOptions, credential: getCredential})
     .then(r => console.log(r.user, r.options, r.credential))
 ```
 The returned promise is resolved with an array or an object filled with the all values.
 This function works in parallel.
 
 ### serie
-```
-serie([func1, func2, func3])
+```javascript
+promiseFlavor.serie([func1, func2, func3])
     .then(r => console.log(r[0], r[1], r[2]))
     
-serie({user: getUser, options: getOptions, credential: getCredential})
+promiseFlavor.serie({user: getUser, options: getOptions, credential: getCredential})
     .then(r => console.log(r.user, r.options, r.credential))
 ```
 The returned promise is resolved with an array or an object filled with the all values.
 This function works in serie.
 
 ### map
-```
+```javascript
 function fsReadFileAndReturnAPromise(filePath) { ... }
 
-map(['path1', 'path2', 'path3'], fsReadFileAndReturnAPromise)
+promiseFlavor.map(['path1', 'path2', 'path3'], fsReadFileAndReturnAPromise)
     .then(r => console.log(r[0], r[1], r[2]))
     
-map({
+promiseFlavor.map({
         preferences: 'path1',
         credentials: 'path2',
         options: 'path3'
@@ -57,13 +75,13 @@ map({
 Call `fsReadFileAndReturnAPromise` for each element of the array or values of the object.
 
 ### filter
-```
+```javascript
 function fsIsPathExistsAndReturnAPromise(filePath) { ... }
 
-filter(['path1', 'path2', 'path3'], fsIsPathExistsAndReturnAPromise)
+promiseFlavor.filter(['path1', 'path2', 'path3'], fsIsPathExistsAndReturnAPromise)
     .then(r => console.log(r)) // array that contains only the available paths
     
-filter({
+promiseFlavor.filter({
         preferences: 'path1',
         credentials: 'path2',
         options: 'path3'
@@ -73,29 +91,19 @@ filter({
 Call `fsIsPathExistsAndReturnAPromise` for each element of the array or values of the object. The resolved promise contains the elements that the promise is resolved with `true` value.
 
 ### waterfall
-```
+```javascript
 const func1 = (p) => Promise.resolve(1) // p === undefined
 const func2 = (p) => Promise.resolve(p + 2) // p === 1
 const func3 = (p) => Promise.resolve(p * 3) // p === 2 + 1
-waterfall([func1, func2, func3])
+promiseFlavor.waterfall([func1, func2, func3])
     .then(r => console.log(r === 9)) // true
 ```
 Call the next function using the previous value as argument. This function returns an instance of Promise resolved with the last resolved values.
 
-### waterfall
-```
-const func1 = (p) => Promise.resolve(1) // p === undefined
-const func2 = (p) => Promise.resolve(p + 2) // p === 1
-const func3 = (p) => Promise.resolve(p * 3) // p === 2 + 1
-waterfall([func1, func2, func3])
-    .then(r => console.log(r === 9)) // true
-```
-Call the next function using the previous value as argument. This function returns an instance of Promise resolved with the last resolved value.
-
 ### retry
-```
-const options = { times: 5, delay: 100, delayType: retry.DELAY_TYPES.LINEAR}
-retry(func, options)
+```javascript
+const options = { times: 5, delay: 100, delayType: promiseFlavor.retry.DELAY_TYPES.LINEAR}
+promiseFlavor.retry(func, options)
     .then(r => console.log(r))
 ```
 Try to run `func` `options.times` times with some delay if specified.
@@ -107,8 +115,8 @@ The options argument is optional. The default values are:
 The `delayType` value is a function, so some custom implementations are admitted.
 
 ### auto
-```
-auto({
+```javascript
+promiseFlavor.auto({
         me: getMe,
         options: getOptions,
         user: ['me', 'options', r => User.loadUserWithOptions(r.me, r.options)]
@@ -119,8 +127,8 @@ Resolve a dependecy tree. Return a Promise with the resolved tree
 
 
 ### parallelAnyway
-```
-parallelAnyway([
+```javascript
+promiseFlavor.parallelAnyway([
         func1,
         func2,
         () => Promise.reject(new Error('DOOM')),
@@ -131,7 +139,7 @@ parallelAnyway([
         console.log(r.errors[2])
     })
 
-parallelAnyway({
+promiseFlavor.parallelAnyway({
         user: getUser,
         options: getOptions,
         ouch: () => Promise.reject(new Error('DOOM')),
@@ -146,8 +154,8 @@ This function is like `parallel` but tries to never fail either some promises do
 
 
 ### serieAnyway
-```
-serieAnyway([
+```javascript
+promiseFlavor.serieAnyway([
         func1,
         func2,
         () => Promise.reject(new Error('DOOM')),
@@ -158,7 +166,7 @@ serieAnyway([
         console.log(r.errors[2])
     })
 
-serieAnyway({
+promiseFlavor.serieAnyway({
         user: getUser,
         options: getOptions,
         ouch: () => Promise.reject(new Error('DOOM')),
@@ -172,14 +180,14 @@ serieAnyway({
 This function is like `serie` but tries to never fail either some promises do.
 
 ### mapAnyway
-```
-map(['path1', 'path2', 'path3', 'Inexistent File Path'], fsReadFileAndReturnAPromise)
+```javascript
+promiseFlavor.map(['path1', 'path2', 'path3', 'Inexistent File Path'], fsReadFileAndReturnAPromise)
     .then(r => {
         console.log(r.results[0], r.results[1], r.restuls[2])
         console.log(r.errors[3])
     })
     
-map({
+promiseFlavor.map({
         preferences: 'path1',
         credentials: 'path2',
         options: 'path3',
@@ -187,19 +195,19 @@ map({
     }, fsReadFileAndReturnAPromise)
     .then(r => {
         console.log(r.results.preferences, r.results.credentials, r.results.options)
-        cosnole.log(r.errors.ouch)
+        console.log(r.errors.ouch)
     })
 ```
 This function is like `map` but tries to never fail either some promises do.
 
 ### filterAnyway
-```
+```javascript
 function fsIsPathExistsAndReturnAPromise(filePath) { ... }
 
-filterAnyway(['path1', 'path2', 'path3'], fsIsPathExistsAndReturnAPromise)
+promiseFlavor.filterAnyway(['path1', 'path2', 'path3'], fsIsPathExistsAndReturnAPromise)
     .then(r => console.log(r.results, r.errors))
     
-filterAnyway({
+promiseFlavor.filterAnyway({
         preferences: 'path1',
         credentials: 'path2',
         options: 'path3'
@@ -209,8 +217,9 @@ filterAnyway({
 This function is like `filter` but tries to never fail either some promises do.
 
 ## Tests
-```
+```bash
 npm test
+npm run coverage
 ```
 
 ## Contributors
