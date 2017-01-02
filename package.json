@@ -11,6 +11,16 @@
     "travis": "npm run lint && nyc npm run tape",
     "test": "npm run tape && npm run lint"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/allevo/promise-flavor.git"
+  },
+  "keywords": [
+    "promise",
+    "control-flow",
+    "flow",
+    "utilities"
+  ],
   "author": "allevo",
   "license": "MIT",
   "dependencies": {},

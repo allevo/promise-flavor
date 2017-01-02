@@ -1,4 +1,5 @@
-# Promise Flavor
+# Promise Flavor [![Build Status](https://travis-ci.org/allevo/promise-flavor.svg)](https://travis-ci.org/allevo/promise-flavor) [![Coverage Status](https://coveralls.io/repos/github/allevo/promise-flavor/badge.svg)](https://coveralls.io/github/allevo/promise-flavor)
+
 ## Synopsis
 
 This library is thougth to be simple, fast and easy to use.
