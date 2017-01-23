@@ -1,6 +1,6 @@
 {
   "name": "promise-flavor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Using promise with flavor. Control flow utilities for promise",
   "main": "index.js",
   "scripts": {
