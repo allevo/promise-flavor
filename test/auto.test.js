@@ -56,7 +56,7 @@ test('auto should work well with many tasks', t => {
         r['task_group10_90'],
       })
   })
-  
+
   tree.all = allDeps
 
   return auto(tree)

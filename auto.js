@@ -40,8 +40,8 @@ function normalizeTree(tree) {
     }
     if (tree[key] instanceof Array) {
       t.tasks[key] = {
-        func: tree[key].pop(),
-        deps: tree[key],
+        func: tree[key][tree[key].length - 1],
+        deps: tree[key].slice(0, -1),
       }
       continue
     }

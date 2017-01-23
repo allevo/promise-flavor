@@ -8,12 +8,13 @@ function generatePromise(conf) {
   })
 }
 
-const UPPER_TIMEOUT_TOLLERANCE_MSEC = 40
+const UPPER_TIMEOUT_TOLLERANCE_MSEC = 60
 const LOWER_TIMEOUT_TOLLERANCE_MSEC = 1
 
 function checkTimeNear(t, startTime, goal) {
-  t.ok(Date.now() - startTime < goal + UPPER_TIMEOUT_TOLLERANCE_MSEC, 'Not too late')
-  t.ok(Date.now() - startTime > goal - LOWER_TIMEOUT_TOLLERANCE_MSEC, 'Not too soon')
+  var delta = Date.now() - startTime
+  t.ok(delta < (goal + UPPER_TIMEOUT_TOLLERANCE_MSEC), 'Not too late: ' + delta)
+  t.ok(delta > (goal - LOWER_TIMEOUT_TOLLERANCE_MSEC), 'Not too soon: ' + delta)
 }
 
 module.exports = {
