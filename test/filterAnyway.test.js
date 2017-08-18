@@ -31,7 +31,7 @@ test('filterAnyway array should work correctly with []', t => {
     })
 })
 
-test('filter array should go on if one fails', t => {
+test('filterAnyway array should go on if one fails', t => {
   return filterAnyway([1, 2, 3, 4, 5, 6], i => {
       if (i === 2 || i === 5) return generatePromise({err: new Error('DOOM')})
       return generatePromise({result: i % 2 === 0, delay: 100})
@@ -44,6 +44,13 @@ test('filter array should go on if one fails', t => {
       t.deepEqual(r.errors[3], undefined)
       t.deepEqual(r.errors[4].message, 'DOOM')
       t.deepEqual(r.errors[5], undefined)
+    })
+})
+
+test('filterAnyway array should receive the key too', t => {
+  return filterAnyway([1, 2, 3, 4, 5, 6], (i, k) => generatePromise({result: i % 2 === 0 && k % 2 === 1}))
+    .then(r => {
+      t.deepEqual(r.results, [ 2, 4, 6 ], 'should have the key')
     })
 })
 
@@ -71,7 +78,7 @@ test('filterAnyway object should work correctly with {}', t => {
     })
 })
 
-test('filter object should go on if one fails', t => {
+test('filterAnyway object should go on if one fails', t => {
   return filterAnyway({1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6}, i => {
       if (i === 2 || i === 5) return generatePromise({err: new Error('DOOM')})
       return generatePromise({result: i % 2 === 0, delay: 100})
@@ -84,5 +91,12 @@ test('filter object should go on if one fails', t => {
       t.deepEqual(r.errors[4], undefined)
       t.deepEqual(r.errors[5].message, 'DOOM')
       t.deepEqual(r.errors[6], undefined)
+    })
+})
+
+test('filterAnyway object should receive the key too', t => {
+  return filterAnyway({1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6}, (i, k) => generatePromise({result: i % 2 === 0 && k % 2 === 0}))
+    .then(r => {
+      t.deepEqual(r.results, { 2: 2, 4: 4, 6: 6 }, 'should have the key')
     })
 })

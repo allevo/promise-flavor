@@ -42,6 +42,13 @@ test('filter array should work correctly with []', t => {
     })
 })
 
+test('filter array should receive the key too', t => {
+  return filter([1, 2, 3, 4, 5, 6], (i, k) => generatePromise({result: i % 2 === 0 && k % 2 === 1}))
+    .then(r => {
+      t.deepEqual(r, [ 2, 4, 6 ], 'should have the key')
+    })
+})
+
 test('filter object should work correctly', t => {
   return filter({1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6}, i => generatePromise({result: i % 2 === 0}))
     .then(r => {
@@ -74,5 +81,12 @@ test('filter object should work correctly with {}', t => {
   return filter({}, () => t.fail('This function should never be called'))
     .then(r => {
       t.deepEqual(r, {})
+    })
+})
+
+test('filter object should receive the key too', t => {
+  return filter({1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6}, (i, k) => generatePromise({result: i % 2 === 0 && k % 2 === 0}))
+    .then(r => {
+      t.deepEqual(r, { 2: 2, 4: 4, 6: 6 }, 'should have the key')
     })
 })

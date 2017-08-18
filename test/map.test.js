@@ -42,6 +42,13 @@ test('map array should work correctly with []', t => {
     })
 })
 
+test('map array should receive the key too', t => {
+  return map([1, 2, 3, 4, 5, 6], (i, k) => generatePromise({result: i*k}))
+    .then(r => {
+      t.deepEqual(r, [ 0, 2, 6, 12, 20, 30 ], 'should have the key')
+    })
+})
+
 test('map object should keep the keys', t => {
   return map({1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6}, i => generatePromise({result: i*i}))
     .then(r => {
@@ -74,5 +81,12 @@ test('map object should work correctly with {}', t => {
   return map({}, () => t.fail('This function should not be called'))
     .then(r => {
       t.deepEqual(r, {})
+    })
+})
+
+test('map object should receive the key too', t => {
+  return map({1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6}, (i, k) => generatePromise({result: i*k}))
+    .then(r => {
+      t.deepEqual(r, {1: 1, 2: 4, 3: 9, 4: 16, 5: 25, 6: 36}, 'should have the key')
     })
 })

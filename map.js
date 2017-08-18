@@ -4,7 +4,7 @@ function mapObjectPromise(subject, promiseFunction) {
   const results = {}
   const keys = Object.keys(subject)
   const promises = keys.map(key => {
-    return promiseFunction(subject[key])
+    return promiseFunction(subject[key], key)
       .then(r => results[key] = r)
   })
   return Promise.all(promises)
@@ -12,7 +12,7 @@ function mapObjectPromise(subject, promiseFunction) {
 }
 
 function mapArrayPromise(subjects, promiseFunction) {
-  const promises = subjects.map(s => promiseFunction(s))
+  const promises = subjects.map(function (s, i) { return promiseFunction(s, i) })
   return Promise.all(promises)
 }
 

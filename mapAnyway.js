@@ -12,7 +12,7 @@ function mapAnywayObjectPromise(subject, promiseFunction) {
 
   const keys = Object.keys(subject)
   const promises = keys.map(key => {
-    return promiseFunction(subject[key])
+    return promiseFunction(subject[key], key)
       .then(r => results[key] = r)
       .catch(e => errors[key] = e)
   })
@@ -25,7 +25,7 @@ function mapAnywayArrayPromise(subject, promiseFunction) {
   const errors = getArrayOfUndefined(subject.length)
 
   const promises = subject.map((s, i) => {
-    return promiseFunction(s)
+    return promiseFunction(s, i)
       .then(r => results[i] = r)
       .catch(e => errors[i] = e)
   })

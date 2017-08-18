@@ -42,6 +42,13 @@ test('mapAnyway array should work correctly with []', t => {
     })
 })
 
+test('mapAnyway array should receive the key too', t => {
+  return mapAnyway([1, 2, 3, 4, 5, 6], (i, k) => generatePromise({result: i*k}))
+    .then(r => {
+      t.deepEqual(r.results, [ 0, 2, 6, 12, 20, 30 ], 'should have the key')
+    })
+})
+
 test('mapAnyway object should work correctly', t => {
   return mapAnyway({1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6}, i => {
       if (i === 2 || i === 5) return generatePromise({err: new Error('DOOM' + i)})
@@ -70,5 +77,12 @@ test('mapAnyway object should work correctly with {}', t => {
     .then(r => {
       t.deepEqual(r.results, {})
       t.deepEqual(r.errors, {})
+    })
+})
+
+test('mapAnyway object should receive the key too', t => {
+  return mapAnyway({1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6}, (i, k) => generatePromise({result: i*k}))
+    .then(r => {
+      t.deepEqual(r.results, {1: 1, 2: 4, 3: 9, 4: 16, 5: 25, 6: 36}, 'should have the key')
     })
 })
